@@ -8,14 +8,14 @@ import terrain.GameGrid.GridPosition;
 
 class GameCell extends Sprite {
 
-    public var _position :GridPosition;
-    public var _walkable :Bool;
-    public var _exit :Bool;
-    public var _sprite :Bitmap;
+    public var _position:GridPosition;
+    public var _walkable:Bool;
+    public var _exit:Bool;
+    public var _sprite:Bitmap;
 
-    public function new (id : Int, x : Int, y : Int) {
+    public function new (id: Int, x: Int, y: Int) {
         super();
-        _position = {x : x, y : y};
+        _position = {x: x, y: y};
         _walkable = true;
         switch (id) {
             case 0:

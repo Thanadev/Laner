@@ -5,12 +5,12 @@ import openfl.display.Stage;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
-	public static var _stage : Stage;
-	private static var instance : Main;
+	public static var _stage: Stage;
+	private static var instance: Main;
 
-	private var _level : Int;
-	private var grid : GameGrid;
-	private var player : Player;
+	private var _level: Int;
+	private var grid: GameGrid;
+	private var player: Player;
 
 	public function new () {
 		super();
@@ -20,7 +20,7 @@ class Main extends Sprite {
 		startLevel(_level);
 	}
 
-	private function startLevel (level : Int) {
+	private function startLevel (level: Int) {
 		trace("Starting level " + _level);
 
 		grid = GameGrid.getInstance();

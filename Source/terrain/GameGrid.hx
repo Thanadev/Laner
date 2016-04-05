@@ -5,16 +5,16 @@ import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.display.Sprite;
 
-typedef GridPosition = {x : Int, y : Int}
+typedef GridPosition = {x: Int, y: Int}
 
 class GameGrid extends Sprite {
 
-    private static var instance : GameGrid;
+    private static var instance: GameGrid;
 
     @:isVar public var playerPos(get, null):GridPosition;
-    private var gameData : Array<Array<GameCell>>;
+    private var gameData: Array<Array<GameCell>>;
 
-    public static function getInstance () : GameGrid {
+    public static function getInstance (): GameGrid {
         if (instance == null) {
             instance =  new GameGrid();
         }
@@ -25,18 +25,18 @@ class GameGrid extends Sprite {
         super();
     }
 
-    public function loadLevel (level : Int) {
+    public function loadLevel (level: Int) {
         removeChildren();
         gameData = new Array<Array<GameCell>>();
-        var gameLevel : GameLevel = new GameLevel(level);
+        var gameLevel: GameLevel = new GameLevel(level);
         playerPos = gameLevel.playerPos;
-        var mapData : Array<Array<Int>> = gameLevel.mapData;
+        var mapData: Array<Array<Int>> = gameLevel.mapData;
 
         var x = 0, y = 0;
         for (row in mapData) {
             var gameRow = new Array<GameCell>();
             for (cell in row) {
-                var gameCell : GameCell = new GameCell(cell, x, y);
+                var gameCell: GameCell = new GameCell(cell, x, y);
                 gameCell.x = x * GameSettings.cellSize;
                 gameCell.y = y * GameSettings.cellSize;
                 gameRow.push(gameCell);
@@ -49,7 +49,7 @@ class GameGrid extends Sprite {
         }
     }
 
-    public static function isMovementLegal (direction : PlayerAction) : Bool {
+    public static function isMovementLegal (direction: PlayerAction): Bool {
         trace(instance.playerPos);
         switch (direction) {
             case PlayerAction.MOVE_BOTTOM:

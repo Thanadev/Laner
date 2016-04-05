@@ -12,12 +12,12 @@ import openfl.display.Sprite;
 
 class Player extends Sprite {
 
-    private static var instance : Player;
+    private static var instance: Player;
 
-    private var playerSprite : Bitmap;
-    private var sprites : Map<PlayerAction, BitmapData>;
+    private var playerSprite: Bitmap;
+    private var sprites: Map<PlayerAction, BitmapData>;
 
-    public static function getInstance (position : GridPosition) {
+    public static function getInstance (position: GridPosition) {
         if (instance == null) {
             instance = new Player (position);
         } else {
@@ -27,7 +27,7 @@ class Player extends Sprite {
         return instance;
     }
 
-    public function new (position : GridPosition) {
+    public function new (position: GridPosition) {
         super ();
         trace ("Player spawned at " + position);
         loadSprites();
@@ -45,7 +45,7 @@ class Player extends Sprite {
         sprites.arrayWrite(PlayerAction.MOVE_RIGHT, Assets.getBitmapData("assets/player/player_right.png"));
     }
 
-    private function onKeyUp (evt : KeyboardEvent) {
+    private function onKeyUp (evt: KeyboardEvent) {
         if (evt.keyCode == Keyboard.UP) {
             move(PlayerAction.MOVE_TOP);
         } else if (evt.keyCode == Keyboard.DOWN) {
@@ -57,7 +57,7 @@ class Player extends Sprite {
         }
     }
 
-    private function move (direction : PlayerAction) {
+    private function move (direction: PlayerAction) {
         if (!GameGrid.isMovementLegal(direction)) {
             return;
         }
@@ -79,7 +79,7 @@ class Player extends Sprite {
         playerSprite.bitmapData = sprites.get(direction);
     }
 
-    public function setPosition (position : GridPosition) {
+    public function setPosition (position: GridPosition) {
         playerSprite.x = position.x * GameSettings.cellSize;
         playerSprite.y = position.y * GameSettings.cellSize;
     }
