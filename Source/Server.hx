@@ -1,5 +1,6 @@
 package ;
 
+import net.Lobby;
 import enums.PlayerRequestStatus;
 import events.ServerOrder;
 import events.PlayerRequest;
@@ -9,30 +10,50 @@ import terrain.GameGrid;
 class Server {
 
     private var _grid: GameGrid;
-    private var _clients: Array<Main>;
+    @:isVar public var _clients(get, null):Array<Client>;
+    private var _lobby: Lobby;
 
-    public function new (client: Main) {
-        _clients = [client];
+    public function new () {
+        _clients = new Array<Client>();
+        _lobby = Lobby.getInstance(this);
     }
 
-    public function sendMapToClients (): GameGrid {
-        var ids = new Array<Float>();
+    public function getCorrespondingClient (identity: PlayerIdentity): Client {
         for (client in _clients) {
-            ids.push(client.sendIdHandler());
+            if (client.identity.idPlayer == identity.idPlayer) {
+                return client;
+            }
         }
-        _grid = GameGrid.getInstance(ids);
-        return _grid;
+
+        return null;
     }
 
     public function requestIdentityHandler (): PlayerIdentity {
-        return new PlayerIdentity(Date.now().getTime(), "DefaultPlayerName");
+        var identity: PlayerIdentity = new PlayerIdentity(Date.now().getTime(), "DefaultPlayerName");
+        return identity;
+    }
+
+    public function requestLobbyConnection (client: Client) {
+        _clients.push(client);
+        _lobby.playerConnectHandler(client.identity);
     }
 
     public function playerRequestHandler (request: PlayerRequest) {
-        if (_grid.isMovementLegal(request.player.idPlayer, request.action)) {
-            _clients[0].serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.SUCCESS, request.action));
-        } else {
-            _clients[0].serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.FAILURE, null));
+        _lobby.findPlayer(request.player.idPlayer).onPlayerRequest(request);
+    }
+
+    public function getClientById (idPlayer: Float) {
+        for (client in _clients) {
+            trace (client.identity.idPlayer + " / " + idPlayer);
+            if (client.identity.idPlayer == idPlayer) {
+                return client;
+            }
         }
+
+        return null;
+    }
+
+    function get__clients():Array<Client> {
+        return _clients;
     }
 }

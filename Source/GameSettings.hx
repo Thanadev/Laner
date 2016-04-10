@@ -1,7 +1,10 @@
 package ;
 
 class GameSettings {
-    // the cell size in pixels
-    public static var cellSize: Int = 32;
-    public static var _serverAddress: String;
+    public static var cellSize: Int = 32; // the cell size in pixels
+    public static var serverAddress: String;
+    public static var mapNb: Int = 5; // number of levels for each game
+    public static var mapWidth: Int = 10; // width of levels in cells
+    public static var mapHeight: Int = 10; // height of levels in cells
+    public static var playerNbToStart: Int = 1; // number of player needed to start a game
 }

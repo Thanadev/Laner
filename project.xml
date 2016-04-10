@@ -2,7 +2,7 @@
 <project>
 	
 	<meta title="Hello" package="com.sample.hello" version="1.0.0" company="Company Name" />
-	<app main="Main" path="Export" file="Hello" />
+	<app main="Client" path="Export" file="Hello" />
 	
 	<source path="Source" />
 	

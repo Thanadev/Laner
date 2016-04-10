@@ -1,6 +1,6 @@
 package terrain;
 
-import Main;
+import Client;
 import openfl.Assets;
 import openfl.display.Sprite;
 import openfl.display.Bitmap;
@@ -34,7 +34,7 @@ class GameCell extends Sprite {
     public function onResolve () {
         if (_exit == true) {
             trace("Thanatos went back home !");
-            Main.onWon();
+            Client.onWon();
         }
     }
 }
