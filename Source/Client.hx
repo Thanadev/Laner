@@ -73,11 +73,20 @@ class Client extends Sprite {
         stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 	}
 
-	public static function onWon () {
-        instance.stage.removeEventListener(KeyboardEvent.KEY_UP, instance.keyUpHandler);
-		instance.removeChildren();
-		instance.startLevel(++instance._level);
+    private function reset () {
+        stage.removeEventListener(KeyboardEvent.KEY_UP, instance.keyUpHandler);
+        removeChildren();
+    }
+
+	public function onWon () {
+        reset();
+		startLevel(++instance._level);
 	}
+
+    public function onGameEnded (message: String) {
+        reset();
+        trace(message);
+    }
 
     private function playerRequestHandler (evt: PlayerRequest) {
         server.playerRequestHandler(evt);

@@ -1,5 +1,6 @@
 package terrain;
 
+import net.Room;
 import Client;
 import openfl.Assets;
 import openfl.display.Sprite;
@@ -31,10 +32,10 @@ class GameCell extends Sprite {
         addChild(_sprite);
     }
 
-    public function onResolve () {
+    public function onResolve (owner: Room, player: Float) {
         if (_exit == true) {
             trace("Thanatos went back home !");
-            Client.onWon();
+            owner.onWon(player);
         }
     }
 }

@@ -1,8 +1,6 @@
 package ;
 
 import net.Lobby;
-import enums.PlayerRequestStatus;
-import events.ServerOrder;
 import events.PlayerRequest;
 import net.PlayerIdentity;
 import terrain.GameGrid;
@@ -44,7 +42,6 @@ class Server {
 
     public function getClientById (idPlayer: Float) {
         for (client in _clients) {
-            trace (client.identity.idPlayer + " / " + idPlayer);
             if (client.identity.idPlayer == idPlayer) {
                 return client;
             }

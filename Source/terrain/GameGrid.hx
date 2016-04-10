@@ -1,5 +1,6 @@
 package terrain;
 
+import net.Room;
 import enums.PlayerAction;
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -81,9 +82,9 @@ class GameGrid extends Sprite {
         return false;
     }
 
-    public function resolvePlayersMovement () {
+    public function resolvePlayersMovement (owner: Room) {
         for (i in 0...playerPos.length) {
-            gameData[playerPos[i].y][playerPos[i].x].onResolve();
+            gameData[playerPos[i].y][playerPos[i].x].onResolve(owner, playerIds[i]);
         }
     }
 
