@@ -38,8 +38,8 @@ class Room {
 
     public function onPlayerLeaves (playerId: Float) {
         if (players.remove(playerId)) {
-            if (players.length > 0) {
-                // TODO on player wins
+            if (players.length == 1) {
+                server.getClientById(players[0]).onGameEnded("Your opponent left, YOU WIIIIIIN !");
             }
         }
     }
@@ -49,8 +49,6 @@ class Room {
     }
 
     public function onWon (player: Float) {
-
-
         playerScores[players.indexOf(player)] ++;
         var totalScore = 0;
         var highScore = 0;
@@ -69,6 +67,7 @@ class Room {
                     }
                     server.getClientById(player).onGameEnded(message);
                 }
+                server._lobby.gameFinishedHandler(this);
                 return;
             }
         }

@@ -9,7 +9,7 @@ class Server {
 
     private var _grid: GameGrid;
     @:isVar public var _clients(get, null):Array<Client>;
-    private var _lobby: Lobby;
+    @:isVar public var _lobby(get, null):Lobby;
 
     public function new () {
         _clients = new Array<Client>();
@@ -52,5 +52,9 @@ class Server {
 
     function get__clients():Array<Client> {
         return _clients;
+    }
+
+    function get__lobby():Lobby {
+        return _lobby;
     }
 }

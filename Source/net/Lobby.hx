@@ -9,7 +9,7 @@ class Lobby {
     private static var instance: Lobby;
     private var server: Server;
     private var rooms: Array<Room>;
-    private var availablePlayers: Array<PlayerIdentity>;
+    private var players: Array<PlayerIdentity>;
     private var roomTable: Map<String, Room>;
 
     public static function getInstance (_server: Server) {
@@ -22,7 +22,7 @@ class Lobby {
 
     private function new(_server: Server) {
         rooms = new Array<Room>();
-        availablePlayers = new Array<PlayerIdentity>();
+        players = new Array<PlayerIdentity>();
         roomTable = new Map<String, Room>();
         server = _server;
     }
@@ -46,15 +46,15 @@ class Lobby {
             roomTable.remove("" + player.idPlayer);
         }
 
-        availablePlayers.remove(player);
+        players.remove(player);
     }
 
     /**
     *   @brief called when player connects on lobby
     **/
     public function playerConnectHandler (player: PlayerIdentity) {
-        if (availablePlayers.indexOf(player) == -1) {
-            availablePlayers.push(player);
+        if (players.indexOf(player) == -1) {
+            players.push(player);
         }
 
         var room: Room = createRoom(Date.now().getTime(), "DefaultRoomName");
@@ -64,5 +64,26 @@ class Lobby {
     public function playerJoinRoomHandler (room: Room, idPlayer: Float) {
         room.onPlayerEnter(idPlayer);
         roomTable.arrayWrite("" + idPlayer, room);
+    }
+
+    public function gameFinishedHandler (room: Room) {
+        var room2: Room = createRoom(Date.now().getTime(), "DefaultRoomName");
+
+        for (playerId in room.players) {
+            roomTable.remove("" + playerId);
+            playerJoinRoomHandler(room2, playerId);
+        }
+
+        rooms.remove(room);
+
+    }
+
+    public function calcAvailablePlayers (): Int {
+        var takenPlayers = 0;
+        for (room in rooms) {
+            takenPlayers += room.playerNb;
+        }
+
+        return players.length - takenPlayers;
     }
 }
