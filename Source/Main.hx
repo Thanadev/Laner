@@ -1,18 +1,24 @@
 package;
 
+import net.ServerOrder;
 import terrain.GameGrid;
 import openfl.display.Stage;
 import openfl.display.Sprite;
 
 class Main extends Sprite {
 	public static var _stage: Stage;
+
 	private static var instance: Main;
 
+	private var server: Server;
 	private var _level: Int;
 	private var grid: GameGrid;
 	private var player: Player;
 
 	public function new () {
+		server = new Server();
+		grid = server.sendMapToClients();
+
 		super();
 		instance = this;
 		_stage = this.stage;
@@ -22,10 +28,8 @@ class Main extends Sprite {
 
 	private function startLevel (level: Int) {
 		trace("Starting level " + _level);
-
-		grid = GameGrid.getInstance();
 		grid.loadLevel(level);
-		player = Player.getInstance(grid.playerPos);
+        player = Player.getInstance(server.requestIdentityHandler(), grid.playerPos);
 		addChild(grid);
 		grid.x = (stage.stageWidth - (10 - 1) * GameSettings.cellSize) /2;
 		grid.y = (stage.stageHeight - (10 - 1) * GameSettings.cellSize) /2;
@@ -35,10 +39,12 @@ class Main extends Sprite {
 	}
 
 	public static function onWon () {
-		instance.grid = null;
-		instance.player = null;
 		instance.removeChildren();
 		instance.startLevel(++instance._level);
+	}
+
+	private function serverOrderHandler (order: ServerOrder) {
+
 	}
 
 	public function gameFinished () {

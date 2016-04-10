@@ -9,7 +9,7 @@ class Lobby {
 
     private static var instance: Lobby;
     private var rooms: Array<Room>;
-    private var availablePlayers: Array<PlayerEntity>;
+    private var availablePlayers: Array<PlayerIdentity>;
 
     public static function getInstance () {
         if (instance == null) {
@@ -30,7 +30,7 @@ class Lobby {
     /**
     * @brief removes him from room and availablePlayers
     **/
-    public function playerDisconnectHandler (player: PlayerEntity) {
+    public function playerDisconnectHandler (player: PlayerIdentity) {
         for (room in rooms) {
             room.onPlayerLeaves(player.idPlayer);
         }
@@ -41,7 +41,7 @@ class Lobby {
     /**
     *   @brief called when player connects on lobby
     **/
-    public function playerConnectHandler (player: PlayerEntity) {
+    public function playerConnectHandler (player: PlayerIdentity) {
         if (availablePlayers.indexOf(player) == -1) {
             availablePlayers.push(player);
         }

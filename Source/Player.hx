@@ -1,5 +1,8 @@
 package;
 
+import net.PlayerIdentity;
+import net.PlayerIdentity;
+import net.PlayerIdentity;
 import terrain.GameGrid;
 import enums.PlayerAction;
 import Main;
@@ -14,12 +17,13 @@ class Player extends Sprite {
 
     private static var instance: Player;
 
+    private var identity: PlayerIdentity;
     private var playerSprite: Bitmap;
     private var sprites: Map<PlayerAction, BitmapData>;
 
-    public static function getInstance (position: GridPosition) {
+    public static function getInstance (identity: PlayerIdentity, position: GridPosition) {
         if (instance == null) {
-            instance = new Player (position);
+            instance = new Player (identity, position);
         } else {
             instance.setPosition(position);
         }
@@ -27,14 +31,15 @@ class Player extends Sprite {
         return instance;
     }
 
-    public function new (position: GridPosition) {
+    public function new (identity: PlayerIdentity, position: GridPosition) {
         super ();
+        this.identity = identity;
         trace ("Player spawned at " + position);
         loadSprites();
         playerSprite  = new Bitmap(cast (sprites.get(PlayerAction.MOVE_BOTTOM), BitmapData));
         addChild(playerSprite);
         setPosition(position);
-        Main._stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+        Main._stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUpHandler);
     }
 
     private function loadSprites () {
@@ -45,19 +50,23 @@ class Player extends Sprite {
         sprites.arrayWrite(PlayerAction.MOVE_RIGHT, Assets.getBitmapData("assets/player/player_right.png"));
     }
 
-    private function onKeyUp (evt: KeyboardEvent) {
+    private function onKeyUpHandler (evt: KeyboardEvent) {
         if (evt.keyCode == Keyboard.UP) {
-            move(PlayerAction.MOVE_TOP);
+            move(identity.idPlayer, PlayerAction.MOVE_TOP);
         } else if (evt.keyCode == Keyboard.DOWN) {
-            move(PlayerAction.MOVE_BOTTOM);
+            move(identity.idPlayer, PlayerAction.MOVE_BOTTOM);
         } else if (evt.keyCode == Keyboard.RIGHT) {
-            move(PlayerAction.MOVE_RIGHT);
+            move(identity.idPlayer, PlayerAction.MOVE_RIGHT);
         } else if (evt.keyCode == Keyboard.LEFT) {
-            move(PlayerAction.MOVE_LEFT);
+            move(identity.idPlayer, PlayerAction.MOVE_LEFT);
         }
     }
+    /**
+    * @brief actualize avatar position on clients
+    **/
+    private function move (playerId: Float, direction: PlayerAction) {
 
-    private function move (direction: PlayerAction) {
+        // TODO let server control movements
         if (!GameGrid.isMovementLegal(direction)) {
             return;
         }
@@ -75,8 +84,15 @@ class Player extends Sprite {
                 return;
         }
 
+        // TODO move on server
         GameGrid.resolvePlayerMovement();
         playerSprite.bitmapData = sprites.get(direction);
+    }
+
+    private function receiveOrder (playerId: Int, order: PlayerAction) {
+        if (order == PlayerAction.MOVE_BOTTOM || order == PlayerAction.MOVE_LEFT || order == PlayerAction.MOVE_RIGHT || order == PlayerAction.MOVE_TOP) {
+            move(playerId, order);
+        }
     }
 
     public function setPosition (position: GridPosition) {
