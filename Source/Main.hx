@@ -1,6 +1,11 @@
 package;
 
-import net.ServerOrder;
+import net.PlayerIdentity;
+import events.ServerOrder;
+import enums.PlayerRequestStatus;
+import net.Room;
+import events.PlayerRequest;
+import openfl.events.Event;
 import terrain.GameGrid;
 import openfl.display.Stage;
 import openfl.display.Sprite;
@@ -14,22 +19,32 @@ class Main extends Sprite {
 	private var _level: Int;
 	private var grid: GameGrid;
 	private var player: Player;
+    @:isVar public var identity(get, null):PlayerIdentity;
 
 	public function new () {
-		server = new Server();
-		grid = server.sendMapToClients();
+        super();
 
-		super();
+		server = new Server(this);
+        identity = server.requestIdentityHandler();
+        grid = server.sendMapToClients();
+
 		instance = this;
 		_stage = this.stage;
 		_level = 0;
 		startLevel(_level);
 	}
 
+    private function connectToRoom (room: Room) {
+        //room.onPlayerEnter();
+    }
+
 	private function startLevel (level: Int) {
 		trace("Starting level " + _level);
 		grid.loadLevel(level);
-        player = Player.getInstance(server.requestIdentityHandler(), grid.playerPos);
+
+        this.player = Player.getInstance(grid.getPlayerLocation(identity.idPlayer));
+        player.broadcaster.addEventListener("PlayerRequest", playerRequestHandler);
+
 		addChild(grid);
 		grid.x = (stage.stageWidth - (10 - 1) * GameSettings.cellSize) /2;
 		grid.y = (stage.stageHeight - (10 - 1) * GameSettings.cellSize) /2;
@@ -43,10 +58,32 @@ class Main extends Sprite {
 		instance.startLevel(++instance._level);
 	}
 
-	private function serverOrderHandler (order: ServerOrder) {
+    private function playerRequestHandler (evt: PlayerRequest) {
+        server.playerRequestHandler(evt);
+    }
 
+	public function serverOrderHandler (order: ServerOrder) {
+        if (order.status == PlayerRequestStatus.SUCCESS) {
+            player.receiveOrder(order.playerId, order.order);
+        }
 	}
+
+    public function sendIdHandler (): Float {
+        return identity.idPlayer;
+    }
+
+    public static function getInstance (): Main {
+        return instance;
+    }
+
+    public static function getPlayerId (): Float {
+        return instance.identity.idPlayer;
+    }
 
 	public function gameFinished () {
 	}
+
+    function get_identity():PlayerIdentity {
+        return identity;
+    }
 }

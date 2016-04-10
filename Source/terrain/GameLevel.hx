@@ -3,26 +3,26 @@ import terrain.GameGrid.GridPosition;
 class GameLevel {
 
     @:isVar public var mapData(get, null):Array<Array<Int>>;
-    @:isVar public var playerPos(get, null):GridPosition;
+    @:isVar public var playerPos(get, null):Array<GridPosition>;
 
     public function new (level : Int) {
         switch (level) {
             case 0:
-                playerPos = {x : 2, y : 7};
+                playerPos = [{x: 1, y: 8}, {x: 8, y: 1}];
                 mapData = [
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [1, 0, 0, 0, 0, 2, 0, 0, 0, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                    [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
                 ];
             case 1:
-                playerPos = {x : 2, y : 7};
+                playerPos = [{x: 1, y: 8}, {x: 8, y: 1}];
                 mapData = [
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -36,7 +36,7 @@ class GameLevel {
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
                 ];
             case 2:
-                playerPos = {x : 8, y : 1};
+                playerPos = [{x: 1, y: 8}, {x: 8, y: 1}];
                 mapData = [
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -50,7 +50,7 @@ class GameLevel {
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
                 ];
             case 3:
-                playerPos = {x : 2, y : 7};
+                playerPos = [{x: 1, y: 8}, {x: 8, y: 1}];
                 mapData = [
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                     [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -70,7 +70,7 @@ class GameLevel {
         return mapData;
     }
 
-    function get_playerPos():GridPosition {
+    function get_playerPos():Array<GridPosition> {
         return playerPos;
     }
 }
