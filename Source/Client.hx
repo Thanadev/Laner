@@ -84,8 +84,8 @@ class Client extends Sprite {
         trace(message);
     }
 
-    private function playerRequestHandler (evt: PlayerRequest) {
-        // socket
+    private function playerRequestHandler (request: PlayerRequest) {
+        _proxy.sendRequest(request);
     }
 
 	public function serverOrderHandler (order: ActionOrder) {

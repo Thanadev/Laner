@@ -1,5 +1,6 @@
 package events;
 
+import enums.MessageType;
 import net.PlayerIdentity;
 import enums.PlayerAction;
 
@@ -9,6 +10,7 @@ class PlayerRequest extends Request {
     @:isVar public var action(get, null):PlayerAction;
 
     public function new(_player: PlayerIdentity, _action: PlayerAction) {
+        type = MessageType.PLAYER;
         player = _player;
         action = _action;
     }

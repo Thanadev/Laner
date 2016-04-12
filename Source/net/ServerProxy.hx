@@ -42,11 +42,11 @@ class ServerProxy {
         }
 
         switch (order.type) {
-            case OrderType.IDENTITY:
+            case MessageType.IDENTITY:
                 trace("Identity received");
                 _client.setIdentity(new PlayerIdentity(order.identity.idPlayer, order.identity.playerName));
-            case OrderType.ACTION:
-            case OrderType.LOADMAP:
+            case MessageType.ACTION:
+            case MessageType.LOADMAP:
                 trace("Received map to load !!");
                 var gameGrid = new GameGrid([-1.0, -1.0]);
                 var levels: Array<GameLevel> = new Array<GameLevel>();
