@@ -1,8 +1,10 @@
 package net;
+
+
 class PlayerIdentity {
 
-    @:isVar public var idPlayer(get, null):Float;
-    @:isVar public var namePlayer(get, null):String;
+    public var idPlayer(get, null):Float;
+    public var namePlayer(get, null):String;
 
     public function new(id: Float, name: String) {
         idPlayer = id;
@@ -16,5 +18,4 @@ class PlayerIdentity {
     function get_namePlayer():String {
         return namePlayer;
     }
-
 }

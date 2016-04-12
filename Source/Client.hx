@@ -6,8 +6,8 @@ import enums.PlayerAction;
 import openfl.ui.Keyboard;
 import openfl.events.KeyboardEvent;
 import net.PlayerIdentity;
-import events.ServerOrder;
-import enums.PlayerRequestStatus;
+import events.ActionOrder;
+import enums.OrderStatus;
 import events.PlayerRequest;
 import openfl.events.Event;
 import terrain.GameGrid;
@@ -30,6 +30,8 @@ class Client extends Sprite {
         super();
         instance = this;
         broadcaster = new EventDispatcher();
+        _identity = new PlayerIdentity(0.2, "Thanatos");
+        initGame (new GameGrid([0.2, 0.3]));
 	}
 
     public function initGame (_gridData: GameGrid) {
@@ -85,8 +87,8 @@ class Client extends Sprite {
         // socket
     }
 
-	public function serverOrderHandler (order: ServerOrder) {
-        if (order.status == PlayerRequestStatus.SUCCESS) {
+	public function serverOrderHandler (order: ActionOrder) {
+        if (order.status == OrderStatus.SUCCESS) {
             if (order.playerId == _identity.idPlayer) {
                 localPlayer.receiveOrder(order.order);
             } else {

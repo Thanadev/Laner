@@ -5,6 +5,7 @@
 	<app main="Client" path="Export" file="Hello" />
 	
 	<source path="Source" />
+	<source path="nodehx" />
 	
 	<haxelib name="openfl" />
 	

@@ -1,8 +1,8 @@
 package net;
 
-import enums.PlayerRequestStatus;
+import enums.OrderStatus;
 import events.PlayerRequest;
-import events.ServerOrder;
+import events.ActionOrder;
 import terrain.GameGrid;
 
 class Room {
@@ -81,7 +81,7 @@ class Room {
     public function onPlayerRequest (request: PlayerRequest) {
         if (grid.movePlayer(request.player.idPlayer, request.action)) {
             for (player in players) {
-                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.SUCCESS, request.action)); @TODO
+                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, OrderStatus.SUCCESS, request.action)); @TODO
             }
 
             var winnerId = grid.resolvePlayersMovement();
@@ -91,7 +91,7 @@ class Room {
             }
         } else {
             for (player in players) {
-                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.FAILURE, null)); @TODO
+                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, OrderStatus.FAILURE, null)); @TODO
             }
         }
     }

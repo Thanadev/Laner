@@ -10,6 +10,7 @@ class GameCell {
     public var _exit:Bool;
 
     public function new (id: Int, x: Int, y: Int) {
+        _id = id;
         _position = {x: x, y: y};
         _walkable = true;
     }

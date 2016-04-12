@@ -9,8 +9,8 @@ class GridSprite extends Sprite {
         for (row in grid.gameData) {
             for (cell in row) {
                 var cellSprite = new CellSprite(cell._id);
-                cellSprite.x = x * GameSettings.cellSize;
-                cellSprite.y = y * GameSettings.cellSize;
+                cellSprite.x = cell._position.x * GameSettings.cellSize;
+                cellSprite.y = cell._position.y * GameSettings.cellSize;
                 addChild(cellSprite);
             }
         }

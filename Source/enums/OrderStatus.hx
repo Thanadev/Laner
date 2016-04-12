@@ -1,6 +1,6 @@
 package enums;
 
-enum PlayerRequestStatus {
+enum OrderStatus {
     SUCCESS;
     FAILURE;
 }
