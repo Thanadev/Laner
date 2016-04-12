@@ -1,5 +1,6 @@
 package;
 
+import terrain.GridSprite;
 import openfl.events.EventDispatcher;
 import enums.PlayerAction;
 import openfl.ui.Keyboard;
@@ -19,8 +20,9 @@ class Client extends Sprite {
 	private static var instance: Client;
 
 	private var server: Server;
-	private var _level: Int;
-	private var grid: GameGrid;
+    private var _level: Int;
+	private var gridData: GameGrid;
+    private var gridSprite: GridSprite;
 	private var localPlayer: Player;
     private var enemyPlayer: Player;
     private var broadcaster: EventDispatcher;
@@ -40,8 +42,8 @@ class Client extends Sprite {
         //room.onPlayerEnter();
     }
 
-    public function initGame (_grid: GameGrid) {
-        grid = _grid;
+    public function initGame (_gridData: GameGrid) {
+        gridData = _gridData;
         localPlayer = new Player();
         enemyPlayer = new Player();
         _level = 0;
@@ -51,18 +53,19 @@ class Client extends Sprite {
 
 	private function startLevel (level: Int) {
 		trace("Starting level " + _level);
-		grid.loadLevel(level);
-        for (pos in grid.playerPos) {
-            if (pos == grid.getPlayerLocation(identity.idPlayer)) {
+		gridData.loadLevel(level);
+        gridSprite = new GridSprite(gridData);
+        for (pos in gridData.playerPos) {
+            if (pos == gridData.getPlayerLocation(identity.idPlayer)) {
                 localPlayer.setPosition(pos);
             } else {
                 enemyPlayer.setPosition(pos);
             }
         }
 
-		addChild(grid);
-		grid.x = (stage.stageWidth - (GameSettings.mapWidth - 1) * GameSettings.cellSize) /2;
-		grid.y = (stage.stageHeight - (GameSettings.mapHeight - 1) * GameSettings.cellSize) /2;
+		addChild(gridSprite);
+		gridSprite.x = (stage.stageWidth - (GameSettings.mapWidth - 1) * GameSettings.cellSize) /2;
+		gridSprite.y = (stage.stageHeight - (GameSettings.mapHeight - 1) * GameSettings.cellSize) /2;
 		addChild(localPlayer);
         localPlayer.x = (stage.stageWidth - (GameSettings.mapWidth - 1) * GameSettings.cellSize) /2;
         localPlayer.y = (stage.stageHeight - (GameSettings.mapHeight - 1) * GameSettings.cellSize) /2;

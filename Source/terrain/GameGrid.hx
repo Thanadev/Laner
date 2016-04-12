@@ -2,17 +2,14 @@ package terrain;
 
 import net.Room;
 import enums.PlayerAction;
-import openfl.Assets;
-import openfl.display.Bitmap;
-import openfl.display.Sprite;
 
 typedef GridPosition = {x: Int, y: Int}
 
-class GameGrid extends Sprite {
+class GameGrid {
 
     private var playerIds: Array<Float>;
     @:isVar public var playerPos(get, null):Array<GridPosition>;
-    private var gameData: Array<Array<GameCell>>;
+    public var gameData: Array<Array<GameCell>>;
     private var gameMaps: Array<GameLevel>;
 
     public function new(clients: Array<Float>) {
