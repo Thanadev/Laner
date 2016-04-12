@@ -10,7 +10,7 @@ class ServerProxy {
 
     private var _client: Client;
     private var _socket: WebSocket;
-    private var _data: String = "";
+    private var _data: String = '';
 
     public function new() {
         _socket = new WebSocket(GameSettings.serverAddress);
@@ -44,6 +44,7 @@ class ServerProxy {
             case OrderType.IDENTITY:
                 _client.setIdentity(order.identity);
             case OrderType.ACTION:
+
             default:
                 trace("[ServerProxy] Unable to determine order type");
         }

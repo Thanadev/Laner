@@ -22,6 +22,4 @@ class ActionOrder extends ServerOrder {
     function get_order():PlayerAction {
         return order;
     }
-
-
 }
