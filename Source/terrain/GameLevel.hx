@@ -80,6 +80,11 @@ class GameLevel {
         }
     }
 
+    public function setLevel (_playerPos: Array<GridPosition>, _mapData: Array<Array<Int>>) {
+        playerPos = _playerPos;
+        mapData = _mapData;
+    }
+
     function get_mapData():Array<Array<Int>> {
         return mapData;
     }

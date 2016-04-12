@@ -1,5 +1,8 @@
 package net;
 
+import terrain.GameLevel;
+import terrain.GameGrid;
+import events.PlayerRequest;
 import enums.OrderStatus;
 import enums.OrderType;
 import haxe.Json;
@@ -12,7 +15,8 @@ class ServerProxy {
     private var _socket: WebSocket;
     private var _data: String = '';
 
-    public function new() {
+    public function new(client: Client) {
+        _client = client;
         _socket = new WebSocket(GameSettings.serverAddress);
         _socket.addEventListener(WebSocketEventType.Open, connectionHandler);
         _socket.addEventListener(WebSocketEventType.Message, messageHandler);
@@ -20,21 +24,18 @@ class ServerProxy {
     }
 
     private function messageHandler (data: Dynamic) {
-        trace(data.data);
-        _data += data.toString();
-        if (_data.indexOf(GameSettings.ENDSTRING) > -1) {
-            _data.split(GameSettings.ENDSTRING).join('');
+        _data += data.data;
+        if (_data.length > 0 && _data.indexOf(GameSettings.ENDSTRING) > -1) {
+            _data = _data.split(GameSettings.ENDSTRING).join('');
             messageEndHandler();
         }
     }
 
-    public function sendMessage( message:String ):Void {
-        _socket.send(message);
+    public function sendRequest( request:PlayerRequest ): Void {
+        _socket.send(Json.stringify(request) + GameSettings.ENDSTRING);
     }
 
     private function messageEndHandler () {
-        trace(_data);
-
         var order = Json.parse(_data);
         if (order.status == OrderStatus.FAILURE) {
             return;
@@ -42,9 +43,20 @@ class ServerProxy {
 
         switch (order.type) {
             case OrderType.IDENTITY:
-                _client.setIdentity(order.identity);
+                trace("Identity received");
+                _client.setIdentity(new PlayerIdentity(order.identity.idPlayer, order.identity.playerName));
             case OrderType.ACTION:
-
+            case OrderType.LOADMAP:
+                trace("Received map to load !!");
+                var gameGrid = new GameGrid([-1.0, -1.0]);
+                var levels: Array<GameLevel> = new Array<GameLevel>();
+                for (i in 0...GameSettings.mapNb) {
+                    var tmp: GameLevel = new GameLevel(-1);
+                    tmp.setLevel(order.grid.gameMaps[i].playerPos, order.grid.gameMaps[i].mapData);
+                    levels.push(tmp);
+                }
+                gameGrid.setGrid(order.grid.playerIds, levels);
+                _client.initGame(gameGrid);
             default:
                 trace("[ServerProxy] Unable to determine order type");
         }

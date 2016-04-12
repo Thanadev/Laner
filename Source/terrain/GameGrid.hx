@@ -1,15 +1,16 @@
 package terrain;
 
+import Array;
 import enums.PlayerAction;
 
 typedef GridPosition = {x: Int, y: Int}
 
 class GameGrid {
 
-    private var playerIds: Array<Float>;
+    public var playerIds: Array<Float>;
     @:isVar public var playerPos(get, null):Array<GridPosition>;
     public var gameData: Array<Array<GameCell>>;
-    private var gameMaps: Array<GameLevel>;
+    public var gameMaps: Array<GameLevel>;
 
     public function new(playerIds: Array<Float>) {
         this.playerIds = playerIds;
@@ -17,6 +18,11 @@ class GameGrid {
         for (i in 0...GameSettings.mapNb) {
             gameMaps.push(new GameLevel(i));
         }
+    }
+
+    public function setGrid (_playerIds: Array<Float>, _gameMaps: Array<GameLevel>) {
+        playerIds = _playerIds;
+        gameMaps = _gameMaps;
     }
 
     public function loadLevel (level: Int) {

@@ -32,7 +32,7 @@ class Client extends Sprite {
         super();
         instance = this;
         broadcaster = new EventDispatcher();
-        _proxy = new ServerProxy();
+        _proxy = new ServerProxy(this);
 	}
 
     public function initGame (_gridData: GameGrid) {
