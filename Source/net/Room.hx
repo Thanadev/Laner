@@ -50,8 +50,8 @@ class Room {
     }
 
     public function onReadyToLaunch () {
-        grid.loadLevel(_level);
         sendMapToClients();
+        grid.loadLevel(_level);
     }
 
     public function onWon (player: Float) {
