@@ -74,7 +74,9 @@ class PlayerProxy {
     private function handleMessage(message):Void {
         switch (message.type) {
             case MessageType.PLAYER:
-                var playerRequest:PlayerRequest = cast message;
+                var playerRequest:PlayerRequest = new PlayerRequest(message.player, message.action);
+                playerRequest.type = message.type;
+
                 Lobby.getInstance().findPlayer(_id).onPlayerRequest(playerRequest);
 
             default:

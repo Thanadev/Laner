@@ -20,6 +20,7 @@
     <class path="d:\Development\Haxe\lime" />
     <class path="Source" />
     <class path="Export\html5\haxe" />
+    <class path="node_modules\nodehx" />
     <class path="nodehx" />
   </classpaths>
   <!-- Build options -->

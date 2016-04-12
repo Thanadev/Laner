@@ -8,13 +8,14 @@ typedef GridPosition = {x: Int, y: Int}
 class GameGrid {
 
     public var playerIds: Array<Float>;
-    @:isVar public var playerPos(get, null):Array<GridPosition>;
+    public var playerPos:Array<GridPosition>;
     public var gameData: Array<Array<GameCell>>;
     public var gameMaps: Array<GameLevel>;
 
     public function new(playerIds: Array<Float>) {
         this.playerIds = playerIds;
-        gameMaps = new Array<GameLevel>();
+        this.playerPos = new Array<GridPosition>();
+        this.gameMaps = new Array<GameLevel>();
         for (i in 0...GameSettings.mapNb) {
             gameMaps.push(new GameLevel(i));
         }
@@ -49,7 +50,6 @@ class GameGrid {
         if (index < 0) {
             return false;
         }
-        //trace(instance.playerPos[index]);
 
         switch (direction) {
             case PlayerAction.MOVE_BOTTOM:
@@ -98,10 +98,6 @@ class GameGrid {
         }
 
         return null;
-    }
-
-    function get_playerPos():Array<GridPosition> {
-        return playerPos;
     }
 
 

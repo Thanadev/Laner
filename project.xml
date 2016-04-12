@@ -6,7 +6,8 @@
 	
 	<source path="Source" />
 	<source path="nodehx" />
-	
+	<source path="node_modules/nodehx" />
+
 	<haxelib name="openfl" />
 	
 	<assets path="Assets" rename="assets" />
