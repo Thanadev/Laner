@@ -5,4 +5,6 @@ enum MessageType {
     IDENTITY;
     LOADMAP;
     PLAYER;
+    ENDGAME;
+    ENDMAP;
 }

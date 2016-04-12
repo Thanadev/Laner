@@ -1,5 +1,7 @@
 package net;
 
+import enums.MessageType;
+import events.EndOrder;
 import events.LoadMapOrder;
 import haxe.Json;
 import enums.OrderStatus;
@@ -16,6 +18,7 @@ class Room {
     @:isVar public var players(get, null):Array<Float>;
     private var grid: GameGrid;
     private var playerScores: Array<Int>;
+    private var _level = 0;
 
     public function new(id: Float, name: String, serv: Server) {
         idRoom = id;
@@ -41,12 +44,13 @@ class Room {
     public function onPlayerLeaves (playerId: Float) {
         if (players.remove(playerId)) {
             if (players.length == 1) {
-                //server.getPlayerById(players[0]).onGameEnded("Your opponent left, YOU WIIIIIIN !"); @TODO
+                //server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(player) + " has won the map ! Next map !")));
             }
         }
     }
 
     public function onReadyToLaunch () {
+        grid.loadLevel(_level);
         sendMapToClients();
     }
 
@@ -67,7 +71,7 @@ class Room {
                     if (player == players[i]) {
                         message = "Omg you won... Unfortunatly I didn't bet on you...";
                     }
-                    //server.getPlayerById(player).onGameEnded(message); @TODO
+                    server.getPlayerById(player).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(player) + " has won the GAME")));
                 }
                 server.getLobby().gameFinishedHandler(this);
                 return;
@@ -76,7 +80,8 @@ class Room {
 
         trace("Player " + players.indexOf(player) + " has won the map ! Next map !");
         for (player in players) {
-            //server.getPlayerById(player).onWon(); @TODO
+            grid.loadLevel(++_level);
+            server.getPlayerById(player).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDMAP, "Player " + players.indexOf(player) + " has won the map ! Next map !")));
         }
     }
 
