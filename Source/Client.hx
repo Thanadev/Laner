@@ -1,5 +1,6 @@
 package;
 
+import net.ServerProxy;
 import terrain.GridSprite;
 import openfl.events.EventDispatcher;
 import enums.PlayerAction;
@@ -25,13 +26,13 @@ class Client extends Sprite {
     private var enemyPlayer: Player;
     private var broadcaster: EventDispatcher;
     private var _identity: PlayerIdentity;
+    private var _proxy: ServerProxy;
 
 	public function new () {
         super();
         instance = this;
         broadcaster = new EventDispatcher();
-        _identity = new PlayerIdentity(0.2, "Thanatos");
-        initGame (new GameGrid([0.2, 0.3]));
+        _proxy = new ServerProxy();
 	}
 
     public function initGame (_gridData: GameGrid) {
