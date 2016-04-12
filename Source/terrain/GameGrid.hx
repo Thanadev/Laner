@@ -1,6 +1,5 @@
 package terrain;
 
-import net.Room;
 import enums.PlayerAction;
 
 typedef GridPosition = {x: Int, y: Int}
@@ -12,9 +11,8 @@ class GameGrid {
     public var gameData: Array<Array<GameCell>>;
     private var gameMaps: Array<GameLevel>;
 
-    public function new(clients: Array<Float>) {
-        super();
-        playerIds = clients;
+    public function new(playerIds: Array<Float>) {
+        this.playerIds = playerIds;
         gameMaps = new Array<GameLevel>();
         for (i in 0...GameSettings.mapNb) {
             gameMaps.push(new GameLevel(i));
@@ -22,7 +20,6 @@ class GameGrid {
     }
 
     public function loadLevel (level: Int) {
-        removeChildren();
         gameData = new Array<Array<GameCell>>();
         playerPos = gameMaps[level].playerPos;
         var mapData: Array<Array<Int>> = gameMaps[level].mapData;
@@ -32,10 +29,7 @@ class GameGrid {
             var gameRow = new Array<GameCell>();
             for (cell in row) {
                 var gameCell: GameCell = new GameCell(cell, x, y);
-                gameCell.x = x * GameSettings.cellSize;
-                gameCell.y = y * GameSettings.cellSize;
                 gameRow.push(gameCell);
-                addChild(gameCell);
                 x++;
             }
             gameData.push(gameRow);
@@ -79,10 +73,16 @@ class GameGrid {
         return false;
     }
 
-    public function resolvePlayersMovement (owner: Room) {
+    public function resolvePlayersMovement () {
+        var ret = null;
+
         for (i in 0...playerPos.length) {
-            gameData[playerPos[i].y][playerPos[i].x].onResolve(owner, playerIds[i]);
+            if (gameData[playerPos[i].y][playerPos[i].x].onResolve(playerIds[i])) {
+                ret = playerIds[i];
+            }
         }
+
+        return ret;
     }
 
     public function getPlayerLocation (playerId: Float): GridPosition {

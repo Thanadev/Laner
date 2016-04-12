@@ -7,23 +7,26 @@ import terrain.GameGrid;
 
 class Server {
 
-    private var _grid: GameGrid;
-    @:isVar public var _clients(get, null):Array<Client>;
-    @:isVar public var _lobby(get, null):Lobby;
+    public static var instance(get, null): Server;
+    private static var _instance: Server;
 
-    public function new () {
-        _clients = new Array<Client>();
-        _lobby = Lobby.getInstance(this);
+    private var _grid: GameGrid;
+    private var _lobby:Lobby;
+
+    public static function main():Void {
+        _instance = new Server();
     }
 
-    public function getCorrespondingClient (identity: PlayerIdentity): Client {
-        for (client in _clients) {
-            if (client.identity.idPlayer == identity.idPlayer) {
-                return client;
-            }
+    public static function get_instance() {
+        if (_instance == null) {
+            _instance = new Server();
         }
 
-        return null;
+        return _instance;
+    }
+
+    public function new () {
+        _lobby = Lobby.getInstance(this);
     }
 
     public function requestIdentityHandler (): PlayerIdentity {
@@ -31,30 +34,30 @@ class Server {
         return identity;
     }
 
-    public function requestLobbyConnection (client: Client) {
-        _clients.push(client);
-        _lobby.playerConnectHandler(client.identity);
+    public function requestLobbyConnection (player: PlayerIdentity) {
+        _lobby.addPlayer(player);
+        _lobby.playerConnectHandler(player);
     }
 
     public function playerRequestHandler (request: PlayerRequest) {
         _lobby.findPlayer(request.player.idPlayer).onPlayerRequest(request);
     }
 
-    public function getClientById (idPlayer: Float) {
-        for (client in _clients) {
-            if (client.identity.idPlayer == idPlayer) {
-                return client;
+    public function getPlayerById (idPlayer: Float) {
+        var ret = null;
+
+        for (player in _lobby.getPlayers()) {
+            if (player.idPlayer == idPlayer) {
+                ret = player;
+                break;
             }
         }
 
-        return null;
+        return ret;
     }
 
-    function get__clients():Array<Client> {
-        return _clients;
-    }
-
-    function get__lobby():Lobby {
+    public function getLobby():Lobby {
         return _lobby;
     }
+
 }

@@ -39,7 +39,7 @@ class Room {
     public function onPlayerLeaves (playerId: Float) {
         if (players.remove(playerId)) {
             if (players.length == 1) {
-                server.getClientById(players[0]).onGameEnded("Your opponent left, YOU WIIIIIIN !");
+                //server.getPlayerById(players[0]).onGameEnded("Your opponent left, YOU WIIIIIIN !"); @TODO
             }
         }
     }
@@ -49,7 +49,7 @@ class Room {
     }
 
     public function onWon (player: Float) {
-        playerScores[players.indexOf(player)] ++;
+        playerScores[players.indexOf(player)]++;
         var totalScore = 0;
         var highScore = 0;
         for (i in 0...playerScores.length) {
@@ -65,28 +65,33 @@ class Room {
                     if (player == players[i]) {
                         message = "Omg you won... Unfortunatly I didn't bet on you...";
                     }
-                    server.getClientById(player).onGameEnded(message);
+                    //server.getPlayerById(player).onGameEnded(message); @TODO
                 }
-                server._lobby.gameFinishedHandler(this);
+                server.getLobby().gameFinishedHandler(this);
                 return;
             }
         }
 
         trace("Player " + players.indexOf(player) + " has won the map ! Next map !");
         for (player in players) {
-            server.getClientById(player).onWon();
+            //server.getPlayerById(player).onWon(); @TODO
         }
     }
 
     public function onPlayerRequest (request: PlayerRequest) {
         if (grid.movePlayer(request.player.idPlayer, request.action)) {
             for (player in players) {
-                server.getClientById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.SUCCESS, request.action));
+                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.SUCCESS, request.action)); @TODO
             }
-            grid.resolvePlayersMovement(this);
+
+            var winnerId = grid.resolvePlayersMovement();
+
+            if (winnerId != null) {
+                this.onWon(winnerId);
+            }
         } else {
             for (player in players) {
-                server.getClientById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.FAILURE, null));
+                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, PlayerRequestStatus.FAILURE, null)); @TODO
             }
         }
     }
@@ -94,8 +99,8 @@ class Room {
     public function sendMapToClients () {
         grid = new GameGrid(players);
         for (player in players) {
-            trace ("Client asked !");
-            server.getClientById(player).initGame(grid);
+            trace("Client asked !");
+            //server.getPlayerById(player).initGame(grid); @TODO
         }
     }
 

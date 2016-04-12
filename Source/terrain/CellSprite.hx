@@ -6,12 +6,11 @@ import openfl.display.Sprite;
 
 class CellSprite extends Sprite {
 
-    private var data: GameCell;
     private var _sprite: Bitmap;
 
-    public function new(_data: GameCell) {
+    public function new(id: Int) {
         super();
-        switch (_data._id) {
+        switch (id) {
             case 0:
                 _sprite = new Bitmap(Assets.getBitmapData("assets/terrain/grass.png"));
             case 1:

@@ -8,7 +8,6 @@ import openfl.events.KeyboardEvent;
 import net.PlayerIdentity;
 import events.ServerOrder;
 import enums.PlayerRequestStatus;
-import net.Room;
 import events.PlayerRequest;
 import openfl.events.Event;
 import terrain.GameGrid;
@@ -19,28 +18,19 @@ class Client extends Sprite {
 
 	private static var instance: Client;
 
-	private var server: Server;
     private var _level: Int;
 	private var gridData: GameGrid;
     private var gridSprite: GridSprite;
 	private var localPlayer: Player;
     private var enemyPlayer: Player;
     private var broadcaster: EventDispatcher;
-    @:isVar public var identity(get, null):PlayerIdentity;
+    private var _identity: PlayerIdentity;
 
 	public function new () {
         super();
         instance = this;
         broadcaster = new EventDispatcher();
-
-		server = new Server();
-        identity = server.requestIdentityHandler();
-        server.requestLobbyConnection(this);
 	}
-
-    private function connectToRoom (room: Room) {
-        //room.onPlayerEnter();
-    }
 
     public function initGame (_gridData: GameGrid) {
         gridData = _gridData;
@@ -56,7 +46,7 @@ class Client extends Sprite {
 		gridData.loadLevel(level);
         gridSprite = new GridSprite(gridData);
         for (pos in gridData.playerPos) {
-            if (pos == gridData.getPlayerLocation(identity.idPlayer)) {
+            if (pos == gridData.getPlayerLocation(_identity.idPlayer)) {
                 localPlayer.setPosition(pos);
             } else {
                 enemyPlayer.setPosition(pos);
@@ -92,12 +82,12 @@ class Client extends Sprite {
     }
 
     private function playerRequestHandler (evt: PlayerRequest) {
-        server.playerRequestHandler(evt);
+        // socket
     }
 
 	public function serverOrderHandler (order: ServerOrder) {
         if (order.status == PlayerRequestStatus.SUCCESS) {
-            if (order.playerId == identity.idPlayer) {
+            if (order.playerId == _identity.idPlayer) {
                 localPlayer.receiveOrder(order.order);
             } else {
                 enemyPlayer.receiveOrder(order.order);
@@ -106,7 +96,7 @@ class Client extends Sprite {
 	}
 
     public function sendIdHandler (): Float {
-        return identity.idPlayer;
+        return _identity.idPlayer;
     }
 
     public static function getInstance (): Client {
@@ -114,22 +104,22 @@ class Client extends Sprite {
     }
 
     public static function getPlayerId (): Float {
-        return instance.identity.idPlayer;
+        return instance.getIdentity().idPlayer;
     }
 
     private function keyUpHandler (evt: KeyboardEvent) {
         if (evt.keyCode == Keyboard.UP) {
-            playerRequestHandler(new PlayerRequest(identity, PlayerAction.MOVE_TOP));
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_TOP));
         } else if (evt.keyCode == Keyboard.DOWN) {
-            playerRequestHandler(new PlayerRequest(identity, PlayerAction.MOVE_BOTTOM));
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_BOTTOM));
         } else if (evt.keyCode == Keyboard.RIGHT) {
-            playerRequestHandler(new PlayerRequest(identity, PlayerAction.MOVE_RIGHT));
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_RIGHT));
         } else if (evt.keyCode == Keyboard.LEFT) {
-            playerRequestHandler(new PlayerRequest(identity, PlayerAction.MOVE_LEFT));
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_LEFT));
         }
     }
 
-    function get_identity():PlayerIdentity {
-        return identity;
+    function getIdentity():PlayerIdentity {
+        return _identity;
     }
 }

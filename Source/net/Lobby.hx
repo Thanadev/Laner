@@ -7,9 +7,9 @@ package net;
 class Lobby {
 
     private static var instance: Lobby;
+    private var players: Array<PlayerIdentity>;
     private var server: Server;
     private var rooms: Array<Room>;
-    private var players: Array<PlayerIdentity>;
     private var roomTable: Map<String, Room>;
 
     public static function getInstance (_server: Server) {
@@ -86,4 +86,15 @@ class Lobby {
 
         return players.length - takenPlayers;
     }
+
+    public function getPlayers(): Array<PlayerIdentity> {
+        return players;
+    }
+
+    public function addPlayer(player: PlayerIdentity): Lobby {
+        this.players.push(player);
+
+        return this;
+    }
+
 }
