@@ -1,13 +1,20 @@
 package socket;
 
+import net.Lobby;
+import net.PlayerData;
+import net.PlayerIdentity;
+import net.PlayerProxy;
 import nodejs.ws.WebSocket;
 import nodejs.ws.WebSocketServer;
 
 class WSocketServer {
 
     private var _server:WebSocketServer;
+    private var _connections:Array<PlayerData>;
 
-    public function new( ) {
+    public function new() {
+        _connections = new Array<PlayerData>();
+
         var opt:WebSocketServerOption = cast {
             port : GameSettings.WEB_SOCKET_PORT
         };
@@ -18,11 +25,15 @@ class WSocketServer {
 
     private function errorHandler( evt:Dynamic ):Void {
         trace('[Socket server] Error');
-        trace(evt);
     }
 
-    private function connectionHandler( socket:WebSocket ):Void {
-        trace('[Socket server] : New Connection');
-        trace(socket);
+    private function connectionHandler( ws:WebSocket ):Void {
+        var playerIdentity = new PlayerIdentity(Date.now().getTime(), "Guest");
+        var playerProxy = new PlayerProxy(ws, playerIdentity);
+        var playerData = new PlayerData(playerIdentity, playerProxy);
+
+        Lobby.getInstance().addPlayer(playerData);
+
+        _connections.push(playerData);
     }
 }

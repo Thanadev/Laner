@@ -1,9 +1,7 @@
 package events;
 
 import enums.OrderStatus;
-import enums.OrderType;
 
-class ServerOrder {
+class Order extends Message {
     public var status: OrderStatus;
-    public var type: OrderType;
 }

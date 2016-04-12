@@ -1,5 +1,7 @@
 package net;
 
+import events.LoadMapOrder;
+import haxe.Json;
 import enums.OrderStatus;
 import events.PlayerRequest;
 import events.ActionOrder;
@@ -81,7 +83,8 @@ class Room {
     public function onPlayerRequest (request: PlayerRequest) {
         if (grid.movePlayer(request.player.idPlayer, request.action)) {
             for (player in players) {
-                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, OrderStatus.SUCCESS, request.action)); @TODO
+                var order = new ActionOrder(request.player.idPlayer, OrderStatus.SUCCESS, request.action);
+                server.getPlayerById(player).proxy.sendMessage(Json.stringify(order));
             }
 
             var winnerId = grid.resolvePlayersMovement();
@@ -91,16 +94,20 @@ class Room {
             }
         } else {
             for (player in players) {
-                //server.getPlayerById(player).serverOrderHandler(new ServerOrder(request.player.idPlayer, OrderStatus.FAILURE, null)); @TODO
+                var order = new ActionOrder(request.player.idPlayer, OrderStatus.FAILURE, null);
+                server.getPlayerById(player).proxy.sendMessage(Json.stringify(order));
             }
         }
     }
 
     public function sendMapToClients () {
         grid = new GameGrid(players);
+
+        var gridOrder = new LoadMapOrder(OrderStatus.SUCCESS, grid);
+
         for (player in players) {
             trace("Client asked !");
-            //server.getPlayerById(player).initGame(grid); @TODO
+            server.getPlayerById(player).proxy.sendMessage(Json.stringify(gridOrder));
         }
     }
 

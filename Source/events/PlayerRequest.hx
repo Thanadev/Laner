@@ -3,7 +3,7 @@ package events;
 import net.PlayerIdentity;
 import enums.PlayerAction;
 
-class PlayerRequest {
+class PlayerRequest extends Request {
 
     @:isVar public var player(get, null):PlayerIdentity;
     @:isVar public var action(get, null):PlayerAction;

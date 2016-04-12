@@ -1,15 +1,15 @@
 package events;
 
-import enums.OrderType;
+import enums.MessageType;
 import enums.PlayerAction;
 import enums.OrderStatus;
 
-class ActionOrder extends ServerOrder {
+class ActionOrder extends Order {
     @:isVar public var playerId(get, null):Float;
     @:isVar public var order(get, null):PlayerAction;
 
     public function new(_playerId: Float, _status: OrderStatus, _order: PlayerAction) {
-        type = OrderType.ACTION;
+        type = MessageType.ACTION;
         status = _status;
         order = _order;
         playerId = _playerId;

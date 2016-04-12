@@ -1,5 +1,7 @@
 package ;
 
+import net.PlayerData;
+import routes.MainRoute;
 import nodejs.express.Express;
 import socket.WSocketServer;
 import nodejs.express.Application;
@@ -42,10 +44,14 @@ class Server {
         _express.listen(GameSettings.APP_PORT);
         _express.use(Express.Static(GameSettings.serverAddress));
 
+        var mainRoute = new MainRoute();
+        _express.get('/', mainRoute.succesHandler);
+
         trace('server listening on ' + GameSettings.APP_PORT);
 
         _websocketServer = new WSocketServer();
-        _lobby = Lobby.getInstance(this);
+        _lobby = Lobby.getInstance();
+        _lobby.setServer(this);
     }
 
     public function requestIdentityHandler (): PlayerIdentity {
@@ -53,20 +59,15 @@ class Server {
         return identity;
     }
 
-    public function requestLobbyConnection (player: PlayerIdentity) {
-        _lobby.addPlayer(player);
-        _lobby.playerConnectHandler(player);
-    }
-
     public function playerRequestHandler (request: PlayerRequest) {
         _lobby.findPlayer(request.player.idPlayer).onPlayerRequest(request);
     }
 
-    public function getPlayerById (idPlayer: Float) {
+    public function getPlayerById (idPlayer: Float): PlayerData {
         var ret = null;
 
         for (player in _lobby.getPlayers()) {
-            if (player.idPlayer == idPlayer) {
+            if (player.identity.idPlayer == idPlayer) {
                 ret = player;
                 break;
             }

@@ -2,14 +2,14 @@ package events;
 
 import terrain.GameGrid;
 import enums.OrderStatus;
-import enums.OrderType;
+import enums.MessageType;
 
-class LoadMapOrder extends ServerOrder {
+class LoadMapOrder extends Order {
 
     public var grid: GameGrid;
 
     public function new(status: OrderStatus, _grid: GameGrid) {
-        type = OrderType.LOADMAP;
+        type = MessageType.LOADMAP;
         this.grid = _grid;
     }
 }

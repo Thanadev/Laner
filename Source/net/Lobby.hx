@@ -7,24 +7,27 @@ package net;
 class Lobby {
 
     private static var instance: Lobby;
-    private var players: Array<PlayerIdentity>;
+    private var players: Array<PlayerData>;
     private var server: Server;
     private var rooms: Array<Room>;
     private var roomTable: Map<String, Room>;
 
-    public static function getInstance (_server: Server) {
+    public static function getInstance ():Lobby {
         if (instance == null) {
-            instance = new Lobby(_server);
+            instance = new Lobby();
         }
 
         return instance;
     }
 
-    private function new(_server: Server) {
+    private function new() {
         rooms = new Array<Room>();
-        players = new Array<PlayerIdentity>();
+        players = new Array<PlayerData>();
         roomTable = new Map<String, Room>();
-        server = _server;
+    }
+
+    public function setServer(server: Server) {
+        this.server = server;
     }
 
     public function findPlayer (idPlayer: Float): Room {
@@ -40,10 +43,10 @@ class Lobby {
     /**
     * @brief removes him from room and availablePlayers
     **/
-    public function playerDisconnectHandler (player: PlayerIdentity) {
+    public function playerDisconnectHandler (player: PlayerData) {
         for (room in rooms) {
-            room.onPlayerLeaves(player.idPlayer);
-            roomTable.remove("" + player.idPlayer);
+            room.onPlayerLeaves(player.identity.idPlayer);
+            roomTable.remove("" + player.identity.idPlayer);
         }
 
         players.remove(player);
@@ -53,10 +56,6 @@ class Lobby {
     *   @brief called when player connects on lobby
     **/
     public function playerConnectHandler (player: PlayerIdentity) {
-        if (players.indexOf(player) == -1) {
-            players.push(player);
-        }
-
         var room: Room = createRoom(Date.now().getTime(), "DefaultRoomName");
         playerJoinRoomHandler(room, player.idPlayer);
     }
@@ -87,12 +86,13 @@ class Lobby {
         return players.length - takenPlayers;
     }
 
-    public function getPlayers(): Array<PlayerIdentity> {
+    public function getPlayers(): Array<PlayerData> {
         return players;
     }
 
-    public function addPlayer(player: PlayerIdentity): Lobby {
+    public function addPlayer(player: PlayerData): Lobby {
         this.players.push(player);
+        playerConnectHandler(player.identity);
 
         return this;
     }

@@ -4,7 +4,7 @@ import terrain.GameLevel;
 import terrain.GameGrid;
 import events.PlayerRequest;
 import enums.OrderStatus;
-import enums.OrderType;
+import enums.MessageType;
 import haxe.Json;
 import nodejs.ws.WebSocket.WebSocketEventType;
 import js.html.WebSocket;

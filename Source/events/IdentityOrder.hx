@@ -1,15 +1,15 @@
 package events;
 
-import enums.OrderType;
+import enums.MessageType;
 import net.PlayerIdentity;
 import enums.OrderStatus;
 
-class IdentityOrder extends ServerOrder {
+class IdentityOrder extends Order {
 
-    public var identity;
+    public var identity: PlayerIdentity;
 
     public function new(_status: OrderStatus, _playerIdentity: PlayerIdentity) {
-        type = OrderType.IDENTITY;
+        type = MessageType.IDENTITY;
         status = _status;
         identity = _playerIdentity;
     }

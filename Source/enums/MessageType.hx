@@ -1,6 +1,8 @@
 package enums;
-enum OrderType {
+
+enum MessageType {
     ACTION;
     IDENTITY;
     LOADMAP;
+    PLAYER;
 }
