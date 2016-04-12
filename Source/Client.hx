@@ -128,7 +128,7 @@ class Client extends Sprite {
         }
     }
 
-    function getIdentity():PlayerIdentity {
+    public function getIdentity():PlayerIdentity {
         return _identity;
     }
 }

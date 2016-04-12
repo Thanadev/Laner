@@ -1,5 +1,7 @@
 package net;
 
+import enums.PlayerAction;
+import events.ActionOrder;
 import terrain.GameLevel;
 import terrain.GameGrid;
 import events.PlayerRequest;
@@ -46,6 +48,21 @@ class ServerProxy {
                 trace("Identity received");
                 _client.setIdentity(new PlayerIdentity(order.identity.idPlayer, order.identity.playerName));
             case MessageType.ACTION:
+                var status = order.status;
+                var tmp = order.order[1];
+                var orderO: PlayerAction = PlayerAction.MOVE_BOTTOM;
+                if (tmp == 0) {
+                    orderO = PlayerAction.MOVE_TOP;
+                } else if (tmp == 1) {
+                    orderO = PlayerAction.MOVE_BOTTOM;
+                } else if (tmp == 2) {
+                    orderO = PlayerAction.MOVE_LEFT;
+                } else if (tmp == 3) {
+                    orderO = PlayerAction.MOVE_RIGHT;
+                }
+
+                var actionOrder = new ActionOrder(_client.getIdentity().idPlayer, OrderStatus.SUCCESS, orderO);
+                _client.serverOrderHandler(actionOrder);
             case MessageType.LOADMAP:
                 trace("Received map to load !!");
                 var gameGrid = new GameGrid([-1.0, -1.0]);
@@ -57,6 +74,12 @@ class ServerProxy {
                 }
                 gameGrid.setGrid(order.grid.playerIds, levels);
                 _client.initGame(gameGrid);
+            case MessageType.ENDMAP:
+                trace(order.message);
+                _client.onWon();
+            case MessageType.ENDGAME:
+                trace("Received map to load !!");
+                _client.onGameEnded(order.message);
             default:
                 trace("[ServerProxy] Unable to determine order type");
         }

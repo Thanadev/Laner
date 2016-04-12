@@ -13,6 +13,11 @@ class GameCell {
         _id = id;
         _position = {x: x, y: y};
         _walkable = true;
+        if (id == 1) {
+            _walkable = false;
+        } else if (id == 2) {
+            _exit = true;
+        }
     }
 
     public function onResolve (player: Float) {
