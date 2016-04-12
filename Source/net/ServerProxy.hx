@@ -1,10 +1,14 @@
 package net;
 
+import enums.OrderStatus;
+import enums.OrderType;
+import haxe.Json;
 import nodejs.ws.WebSocket.WebSocketEventType;
 import js.html.WebSocket;
 
 class ServerProxy {
 
+    private var _client: Client;
     private var _socket: WebSocket;
     private var _data: String = "";
 
@@ -18,7 +22,8 @@ class ServerProxy {
     private function messageHandler (data: Dynamic) {
         trace(data.data);
         _data += data.toString();
-        if (_data.indexOf("#end#") > -1) {
+        if (_data.indexOf(GameSettings.ENDSTRING) > -1) {
+            _data.split(GameSettings.ENDSTRING).join('');
             messageEndHandler();
         }
     }
@@ -29,6 +34,20 @@ class ServerProxy {
 
     private function messageEndHandler () {
         trace(_data);
+
+        var order = Json.parse(_data);
+        if (order.status == OrderStatus.FAILURE) {
+            return;
+        }
+
+        switch (order.type) {
+            case OrderType.IDENTITY:
+                _client.setIdentity(order.identity);
+            case OrderType.ACTION:
+            default:
+                trace("[ServerProxy] Unable to determine order type");
+        }
+
         _data = "";
     }
 
@@ -37,7 +56,7 @@ class ServerProxy {
     }
 
     public function connectionHandler ( socket:WebSocket ) {
-        sendMessage("Hey ! Connected !");
+
     }
 
 }

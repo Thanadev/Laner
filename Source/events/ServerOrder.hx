@@ -5,5 +5,5 @@ import enums.OrderType;
 
 class ServerOrder {
     public var status: OrderStatus;
-    private var type: OrderType;
+    public var type: OrderType;
 }
