@@ -1,6 +1,9 @@
 package ;
 
 class GameSettings {
+    public static inline var APP_PORT:Int = 8000;
+    public static inline var WEB_SOCKET_PORT:Int = 8128;
+
     public static var cellSize: Int = 32; // the cell size in pixels
     public static var serverAddress: String;
     public static var mapNb: Int = 5; // number of levels for each game
