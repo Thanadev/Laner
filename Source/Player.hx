@@ -12,19 +12,27 @@ class Player extends Sprite {
     private var playerSprite: Bitmap;
     private var sprites: Map<PlayerAction, BitmapData>;
 
-    public function new () {
+    public function new (isLocal: Bool) {
         super ();
-        loadSprites();
+        loadSprites(isLocal);
         playerSprite  = new Bitmap(cast (sprites.get(PlayerAction.MOVE_BOTTOM), BitmapData));
         addChild(playerSprite);
     }
 
-    private function loadSprites () {
+    private function loadSprites (isLocal: Bool) {
         sprites = new Map<PlayerAction, BitmapData>();
-        sprites.arrayWrite(PlayerAction.MOVE_TOP, Assets.getBitmapData("assets/player/player_top.png"));
-        sprites.arrayWrite(PlayerAction.MOVE_BOTTOM, Assets.getBitmapData("assets/player/player_bottom.png"));
-        sprites.arrayWrite(PlayerAction.MOVE_LEFT, Assets.getBitmapData("assets/player/player_left.png"));
-        sprites.arrayWrite(PlayerAction.MOVE_RIGHT, Assets.getBitmapData("assets/player/player_right.png"));
+        if (isLocal) {
+            sprites.arrayWrite(PlayerAction.MOVE_TOP, Assets.getBitmapData("assets/players/player_top.png"));
+            sprites.arrayWrite(PlayerAction.MOVE_BOTTOM, Assets.getBitmapData("assets/players/player_bottom.png"));
+            sprites.arrayWrite(PlayerAction.MOVE_LEFT, Assets.getBitmapData("assets/players/player_left.png"));
+            sprites.arrayWrite(PlayerAction.MOVE_RIGHT, Assets.getBitmapData("assets/players/player_right.png"));
+        } else {
+            sprites.arrayWrite(PlayerAction.MOVE_TOP, Assets.getBitmapData("assets/players/enemy_top.png"));
+            sprites.arrayWrite(PlayerAction.MOVE_BOTTOM, Assets.getBitmapData("assets/players/enemy_bottom.png"));
+            sprites.arrayWrite(PlayerAction.MOVE_LEFT, Assets.getBitmapData("assets/players/enemy_left.png"));
+            sprites.arrayWrite(PlayerAction.MOVE_RIGHT, Assets.getBitmapData("assets/players/enemy_right.png"));
+        }
+
     }
 
 

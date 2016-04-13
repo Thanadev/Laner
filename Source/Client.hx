@@ -37,8 +37,8 @@ class Client extends Sprite {
 
     public function initGame (_gridData: GameGrid) {
         gridData = _gridData;
-        localPlayer = new Player();
-        enemyPlayer = new Player();
+        localPlayer = new Player(true);
+        enemyPlayer = new Player(false);
         _level = 0;
         startLevel(_level);
     }

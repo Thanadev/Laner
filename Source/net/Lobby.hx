@@ -56,12 +56,19 @@ class Lobby {
     *   @brief called when player connects on lobby
     **/
     public function playerConnectHandler (player: PlayerIdentity) {
-        var room: Room;
-        if (rooms.length == 0) {
-            room = createRoom(Date.now().getTime(), "DefaultRoomName");
-        } else {
-            room = rooms[0];
+        var room: Room = null;
+
+        for (checkedRoom in rooms) {
+            if (checkedRoom.playerNb < GameSettings.playerNbToStart) {
+                room = checkedRoom;
+                break;
+            }
         }
+
+        if (room == null || rooms.length == 0) {
+            room = createRoom(Date.now().getTime(), "DefaultRoomName");
+    }
+
 
         playerJoinRoomHandler(room, player.idPlayer);
     }
