@@ -41,6 +41,7 @@ class ServerProxy {
         var order = Json.parse(_data);
         if (order.status[0] == OrderStatus.FAILURE) {
             trace('Order failed!');
+            _data = "";
             return;
         }
 
