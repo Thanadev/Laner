@@ -1,5 +1,6 @@
 package net;
 
+import events.LoadLevelOrder;
 import enums.MessageType;
 import events.EndOrder;
 import events.LoadMapOrder;
@@ -81,8 +82,9 @@ class Room {
 
         trace("Player " + player + " has won the map! Next map!");
         for (player in players) {
-            grid.loadLevel(++_level);
-            server.getPlayerById(player).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDMAP, "Player " + players.indexOf(player) + " has won the map! Next map!")));
+            _level++;
+            grid.loadLevel(_level);
+            server.getPlayerById(player).proxy.sendMessage(Json.stringify(new LoadLevelOrder(OrderStatus.SUCCESS, MessageType.LOADLEVEL, "Player " + players.indexOf(player) + " has won the map! Next map!", _level)));
         }
     }
 

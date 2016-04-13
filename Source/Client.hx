@@ -82,8 +82,8 @@ class Client extends Sprite {
         removeChildren();
     }
 
-	public function onWon () {
-        _level++;
+	public function onWon (level: Int) {
+        _level = level;
 
         reset();
 		startLevel(_level);

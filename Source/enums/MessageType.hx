@@ -6,5 +6,5 @@ enum MessageType {
     LOADMAP;
     PLAYER;
     ENDGAME;
-    ENDMAP;
+    LOADLEVEL;
 }

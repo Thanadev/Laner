@@ -77,9 +77,9 @@ class ServerProxy {
                 }
                 gameGrid.setGrid(order.grid.playerIds, levels);
                 _client.initGame(gameGrid);
-            case MessageType.ENDMAP:
+            case MessageType.LOADLEVEL:
                 trace(order.message);
-                _client.onWon();
+                _client.onWon(order.level);
             case MessageType.ENDGAME:
                 trace('Game ended!');
                 _client.onGameEnded(order.message);
