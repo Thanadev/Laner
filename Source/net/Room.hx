@@ -44,7 +44,7 @@ class Room {
     public function onPlayerLeaves (playerId: Float) {
         if (players.remove(playerId)) {
             if (players.length == 1) {
-                server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(player) + " has won the map ! Next map !")));
+                server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(playerId) + " has won the map ! Next map !")));
                 Lobby.getInstance().gameFinishedHandler(this);
             }
         }

@@ -9,5 +9,5 @@ class GameSettings {
     public static var mapNb: Int = 5; // number of levels for each game
     public static var mapWidth: Int = 10; // width of levels in cells
     public static var mapHeight: Int = 10; // height of levels in cells
-    public static var playerNbToStart: Int = 1; // number of player needed to start a game
+    public static var playerNbToStart: Int = 2; // number of player needed to start a game
 }
