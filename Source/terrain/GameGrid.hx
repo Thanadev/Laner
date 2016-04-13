@@ -51,25 +51,31 @@ class GameGrid {
         if (index < 0) {
             return false;
         }
+        var enemyIndex: Int;
+        if (index == 0) {
+            enemyIndex = 1;
+        } else {
+            enemyIndex = 0;
+        }
 
         switch (direction) {
             case PlayerAction.MOVE_BOTTOM:
-                if (gameData.length > playerPos[index].y + 1 && gameData[playerPos[index].y + 1][playerPos[index].x]._walkable) {
+                if ((gameData.length > playerPos[index].y + 1) && (gameData[playerPos[index].y + 1][playerPos[index].x]._walkable) && gameData[playerPos[index].y + 1][playerPos[index].x] != gameData[playerPos[enemyIndex].y][playerPos[enemyIndex].x]) {
                     playerPos[index].y++;
                     return true;
                 }
             case PlayerAction.MOVE_TOP:
-                if (playerPos[index].y - 1 > 0 && gameData[playerPos[index].y - 1][playerPos[index].x]._walkable) {
+                if (playerPos[index].y - 1 > 0 && gameData[playerPos[index].y - 1][playerPos[index].x]._walkable  && gameData[playerPos[index].y - 1][playerPos[index].x] != gameData[playerPos[enemyIndex].y][playerPos[enemyIndex].x]) {
                     playerPos[index].y--;
                     return true;
                 }
             case PlayerAction.MOVE_RIGHT:
-                if (gameData[playerPos[index].y].length > playerPos[index].x + 1 && gameData[playerPos[index].y][playerPos[index].x + 1]._walkable) {
+                if (gameData[playerPos[index].y].length > playerPos[index].x + 1 && gameData[playerPos[index].y][playerPos[index].x + 1]._walkable && gameData[playerPos[index].y][playerPos[index].x + 1] != gameData[playerPos[enemyIndex].y][playerPos[enemyIndex].x]) {
                     playerPos[index].x++;
                     return true;
                 }
             case PlayerAction.MOVE_LEFT:
-                if (playerPos[index].x - 1 > 0 && gameData[playerPos[index].y][playerPos[index].x - 1]._walkable) {
+                if (playerPos[index].x - 1 > 0 && gameData[playerPos[index].y][playerPos[index].x - 1]._walkable && gameData[playerPos[index].y][playerPos[index].x - 1] != gameData[playerPos[enemyIndex].y][playerPos[enemyIndex].x]) {
                     playerPos[index].x--;
                     return true;
                 }

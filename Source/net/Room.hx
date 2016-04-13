@@ -81,8 +81,8 @@ class Room {
         }
 
         trace("Player " + player + " has won the map! Next map!");
+        _level++;
         for (player in players) {
-            _level++;
             grid.loadLevel(_level);
             server.getPlayerById(player).proxy.sendMessage(Json.stringify(new LoadLevelOrder(OrderStatus.SUCCESS, MessageType.LOADLEVEL, "Player " + players.indexOf(player) + " has won the map! Next map!", _level)));
         }
