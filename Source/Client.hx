@@ -83,8 +83,10 @@ class Client extends Sprite {
     }
 
 	public function onWon () {
+        _level++;
+
         reset();
-		startLevel(++instance._level);
+		startLevel(_level);
 	}
 
     public function onGameEnded (message: String) {
