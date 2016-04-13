@@ -44,7 +44,7 @@ class Room {
     public function onPlayerLeaves (playerId: Float) {
         if (players.remove(playerId)) {
             if (players.length == 1) {
-                server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(playerId) + " has won the map ! Next map !")));
+                server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players[0] + " has won the map ! Next map !")));
                 Lobby.getInstance().gameFinishedHandler(this);
             }
         }
@@ -66,7 +66,7 @@ class Room {
             }
 
             if (totalScore >= GameSettings.mapNb) {
-                trace("Player " + players.indexOf(player) + " has won the GAME ! Such awesomeness !! :O");
+                trace("Player " + player + " has won the GAME! Such awesomeness!! :O");
                 for (player in players) {
                     var message: String = "Sorry, but your opponent skill is higher than yours...";
                     if (player == players[i]) {
@@ -79,10 +79,10 @@ class Room {
             }
         }
 
-        trace("Player " + players.indexOf(player) + " has won the map ! Next map !");
+        trace("Player " + player + " has won the map! Next map!");
         for (player in players) {
             grid.loadLevel(++_level);
-            server.getPlayerById(player).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDMAP, "Player " + players.indexOf(player) + " has won the map ! Next map !")));
+            server.getPlayerById(player).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDMAP, "Player " + players.indexOf(player) + " has won the map! Next map!")));
         }
     }
 
@@ -109,10 +109,8 @@ class Room {
     public function sendMapToClients () {
         grid = new GameGrid(players);
 
-
-
         for (i in 0...players.length) {
-            trace("Client asked !");
+            trace('Client ' + players[i] + ' asked the map!');
             var gridOrder = new LoadMapOrder(OrderStatus.SUCCESS, grid, i);
             server.getPlayerById(players[i]).proxy.sendMessage(Json.stringify(gridOrder));
         }

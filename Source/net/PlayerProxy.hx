@@ -29,13 +29,13 @@ class PlayerProxy {
         try {
             _socket.send(message + GameSettings.ENDSTRING);
         } catch ( e: js.Error ) {
-            trace('ERROR : ' + e.message);
+            trace('Error while sending message to ' + _id + ': ' + e.message);
         }
     }
 
     private function sendIdentity(playerIdentity:PlayerIdentity): Void {
         var identityOrder = new IdentityOrder(OrderStatus.SUCCESS, playerIdentity);
-        trace('New Connection: ' + Json.stringify(identityOrder));
+        trace('New Connection: ' + playerIdentity.idPlayer);
 
         sendMessage(Json.stringify(identityOrder));
     }
@@ -53,7 +53,7 @@ class PlayerProxy {
             if ( _data.length > 0 ) {
                 endHandler();
             } else {
-                trace('Empty data: ' + data);
+                trace('Received empty data from ' + _id + ': ' + data);
             }
         }
     }
@@ -65,27 +65,27 @@ class PlayerProxy {
             message = Json.parse(_data);
             _data = '';
         } catch ( e:js.Error ) {
-            trace('JSON parse failed: ' + e.message);
+            trace('JSON parse failed for player ' + _id + ': ' + e.message);
         }
 
         if ( message != null && message.type != null) {
-            trace('Message received: ' + message);
             handleMessage(message);
         } else {
-            trace('Data corrupted');
+            trace('Received corrupted data from ' + _id);
         }
     }
 
     private function handleMessage(message):Void {
         switch (message.type) {
             case MessageType.PLAYER:
-                var playerRequest:PlayerRequest = new PlayerRequest(message.player, message.action);
+                trace('Message received from ' + _id + ': ' + message.action[0]);
+                var playerRequest:PlayerRequest = new PlayerRequest(message.player, cast message.action);
                 playerRequest.type = message.type;
 
                 Lobby.getInstance().findPlayer(_id).onPlayerRequest(playerRequest);
 
             default:
-                trace('Data corrupted: invalid type');
+                trace('Received corrupted data from ' + _id + ': invalid type');
         }
     }
 }

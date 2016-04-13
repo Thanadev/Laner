@@ -47,7 +47,7 @@ class Server {
         var mainRoute = new MainRoute();
         _express.get('/', mainRoute.succesHandler);
 
-        trace('server listening on ' + GameSettings.APP_PORT);
+        trace('Server listening on ' + GameSettings.APP_PORT);
 
         _websocketServer = new WSocketServer();
         _lobby = Lobby.getInstance();

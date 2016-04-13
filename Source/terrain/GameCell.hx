@@ -24,7 +24,7 @@ class GameCell {
         var ret = false;
 
         if (_exit == true) {
-            trace("Thanatos went back home !");
+            trace("Thanatos went back home!");
             ret = true;
         }
 

@@ -9,7 +9,7 @@ class MainRoute extends Route {
     }
 
     private function _sucessHandler(request:ExpressRequest,response:ExpressResponse):Void{
-        trace('Play!');
+        trace('Main route loaded');
         response.send('Coucou !');
     }
 }

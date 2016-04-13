@@ -9,9 +9,10 @@ class LoadMapOrder extends Order {
     public var positionNumber: Int;
     public var grid: GameGrid;
 
-    public function new(status: OrderStatus, _grid: GameGrid, _positionNumber: Int) {
-        type = MessageType.LOADMAP;
-        positionNumber = _positionNumber;
-        grid = _grid;
+    public function new(status: OrderStatus, grid: GameGrid, positionNumber: Int) {
+        this.type = MessageType.LOADMAP;
+        this.positionNumber = positionNumber;
+        this.grid = grid;
+        this.status = status;
     }
 }

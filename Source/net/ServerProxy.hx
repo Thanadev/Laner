@@ -40,13 +40,13 @@ class ServerProxy {
     private function messageEndHandler () {
         var order = Json.parse(_data);
         if (order.status[0] == OrderStatus.FAILURE) {
-            trace('Order failed');
+            trace('Order failed!');
             return;
         }
 
         switch (order.type) {
             case MessageType.IDENTITY:
-                trace("Identity received");
+                trace('Identity received');
                 _client.setIdentity(new PlayerIdentity(order.identity.idPlayer, order.identity.playerName));
             case MessageType.ACTION:
                 var status = order.status;
@@ -65,7 +65,7 @@ class ServerProxy {
                 var actionOrder = new ActionOrder(_client.getIdentity().idPlayer, OrderStatus.SUCCESS, orderO);
                 _client.serverOrderHandler(actionOrder);
             case MessageType.LOADMAP:
-                trace("Received map to load !!");
+                trace('Received map to load!');
                 var position = order.positionNumber;
                 var gameGrid = new GameGrid([-1.0, -1.0]);
                 var levels: Array<GameLevel> = new Array<GameLevel>();
@@ -80,17 +80,17 @@ class ServerProxy {
                 trace(order.message);
                 _client.onWon();
             case MessageType.ENDGAME:
-                trace("Received map to load !!");
+                trace('Game ended!');
                 _client.onGameEnded(order.message);
             default:
-                trace("[ServerProxy] Unable to determine order type");
+                trace('Unable to determine order type');
         }
 
         _data = "";
     }
 
     private function serrorHandler( evt:Dynamic ):Void {
-        trace('[Socket server] Error');
+        trace('Socket server Error');
     }
 
     public function connectionHandler ( socket:WebSocket ) {

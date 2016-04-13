@@ -34,16 +34,16 @@ class Player extends Sprite {
     private function move (direction: PlayerAction) {
         switch (direction) {
             case PlayerAction.MOVE_TOP:
-                trace("top");
+                trace("moving top");
                 playerSprite.y -= GameSettings.cellSize;
             case PlayerAction.MOVE_BOTTOM:
-                trace("bot");
+                trace("moving bottom");
                 playerSprite.y += GameSettings.cellSize;
             case PlayerAction.MOVE_RIGHT:
-                trace("right");
+                trace("moving right");
                 playerSprite.x += GameSettings.cellSize;
             case PlayerAction.MOVE_LEFT:
-                trace("left");
+                trace("moving left");
                 playerSprite.x -= GameSettings.cellSize;
             default:
                 return;

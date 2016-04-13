@@ -24,7 +24,7 @@ class WSocketServer {
     }
 
     private function errorHandler( evt:Dynamic ):Void {
-        trace('[Socket server] Error');
+        trace('Socket server error');
     }
 
     private function connectionHandler( ws:WebSocket ):Void {
