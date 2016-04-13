@@ -48,11 +48,19 @@ class Client extends Sprite {
 		trace("Starting level " + _level);
 		gridData.loadLevel(level);
         gridSprite = new GridSprite(gridData);
-        for (pos in gridData.playerPos) {
-            if (pos == gridData.getPlayerLocation(_identity.idPlayer)) {
-                localPlayer.setPosition(pos);
+        trace (_identity.idPlayer);
+        for (i in 0...gridData.playerPos.length) {
+            var pos = gridData.getPlayerLocation(_identity.idPlayer);
+            if (pos == null) {
+                trace("Position is null, check ids !!");
+                break;
+            }
+            if (gridData.playerPos[i] == pos) {
+                trace("Player pos found ! " + gridData.playerPos[i]);
+                localPlayer.setPosition(gridData.playerPos[i]);
             } else {
-                enemyPlayer.setPosition(pos);
+                trace("Enemy pos found !" + gridData.playerPos[i]);
+                enemyPlayer.setPosition(gridData.playerPos[i]);
             }
         }
 

@@ -23,6 +23,7 @@ class GameGrid {
 
     public function setGrid (_playerIds: Array<Float>, _gameMaps: Array<GameLevel>) {
         playerIds = _playerIds;
+        trace(playerIds);
         gameMaps = _gameMaps;
     }
 

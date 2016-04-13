@@ -46,7 +46,7 @@ class ServerProxy {
 
         switch (order.type) {
             case MessageType.IDENTITY:
-                trace('Identity received');
+                trace("Identity received, waiting for more players");
                 _client.setIdentity(new PlayerIdentity(order.identity.idPlayer, order.identity.playerName));
             case MessageType.ACTION:
                 var status = order.status;
@@ -66,7 +66,7 @@ class ServerProxy {
                 _client.serverOrderHandler(actionOrder);
             case MessageType.LOADMAP:
                 trace('Received map to load!');
-                var position = order.positionNumber;
+                //var position = order.positionNumber;
                 var gameGrid = new GameGrid([-1.0, -1.0]);
                 var levels: Array<GameLevel> = new Array<GameLevel>();
                 for (i in 0...GameSettings.mapNb) {
