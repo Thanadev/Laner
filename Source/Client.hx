@@ -1,5 +1,7 @@
 package;
 
+import model.Point;
+import openfl.events.TouchEvent;
 import net.ServerProxy;
 import terrain.GridSprite;
 import openfl.events.EventDispatcher;
@@ -27,12 +29,14 @@ class Client extends Sprite {
     private var broadcaster: EventDispatcher;
     private var _identity: PlayerIdentity;
     private var _proxy: ServerProxy;
+    private var _mouseSwipe: Array<Point>;
 
 	public function new () {
         super();
         instance = this;
         broadcaster = new EventDispatcher();
         _proxy = new ServerProxy(this);
+        _mouseSwipe = new Array<Point>();
 	}
 
     public function initGame (_gridData: GameGrid) {
@@ -75,11 +79,63 @@ class Client extends Sprite {
         enemyPlayer.y = (stage.stageHeight - (GameSettings.mapHeight - 1) * GameSettings.cellSize) /2;
 
         stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+        stage.addEventListener(TouchEvent.TOUCH_BEGIN, touchBeginHandler);
+        stage.addEventListener(TouchEvent.TOUCH_END, touchEndHandler);
 	}
 
     private function reset () {
-        stage.removeEventListener(KeyboardEvent.KEY_UP, instance.keyUpHandler);
+        stage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
+        stage.removeEventListener(TouchEvent.TOUCH_BEGIN, touchBeginHandler);
+        stage.removeEventListener(TouchEvent.TOUCH_END, touchEndHandler);
         removeChildren();
+    }
+
+    private function touchBeginHandler (evt: TouchEvent) {
+        trace('Touch begin');
+        _mouseSwipe = new Array<Point>();
+        _mouseSwipe.push(new Point(evt.stageX, evt.stageY));
+    }
+
+    private function touchEndHandler (evt: TouchEvent) {
+        trace('Touch end');
+        _mouseSwipe.push(new Point(evt.stageX, evt.stageY));
+
+
+        var direction:PlayerAction = null;
+
+
+        var averageX = _mouseSwipe[1].x - _mouseSwipe[0].x;
+        var averageY = _mouseSwipe[1].y - _mouseSwipe[0].y;
+
+        if (Math.abs(averageX) > Math.abs(averageY)) {
+            if (averageX > 0) {
+                direction = PlayerAction.MOVE_RIGHT;
+            } else {
+                direction = PlayerAction.MOVE_LEFT;
+            }
+        } else {
+            if (averageY > 0) {
+                direction = PlayerAction.MOVE_BOTTOM;
+            } else {
+                direction = PlayerAction.MOVE_TOP;
+            }
+        }
+
+        trace(direction);
+
+        playerRequestHandler(new PlayerRequest(_identity, direction));
+    }
+
+    private function keyUpHandler (evt: KeyboardEvent) {
+        if (evt.keyCode == Keyboard.UP) {
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_TOP));
+        } else if (evt.keyCode == Keyboard.DOWN) {
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_BOTTOM));
+        } else if (evt.keyCode == Keyboard.RIGHT) {
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_RIGHT));
+        } else if (evt.keyCode == Keyboard.LEFT) {
+            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_LEFT));
+        }
     }
 
 	public function onWon (level: Int) {
@@ -120,18 +176,6 @@ class Client extends Sprite {
 
     public static function getPlayerId (): Float {
         return instance.getIdentity().idPlayer;
-    }
-
-    private function keyUpHandler (evt: KeyboardEvent) {
-        if (evt.keyCode == Keyboard.UP) {
-            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_TOP));
-        } else if (evt.keyCode == Keyboard.DOWN) {
-            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_BOTTOM));
-        } else if (evt.keyCode == Keyboard.RIGHT) {
-            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_RIGHT));
-        } else if (evt.keyCode == Keyboard.LEFT) {
-            playerRequestHandler(new PlayerRequest(_identity, PlayerAction.MOVE_LEFT));
-        }
     }
 
     public function setIdentity (identity: PlayerIdentity) {
