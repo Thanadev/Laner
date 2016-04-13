@@ -21,6 +21,7 @@ class PlayerProxy {
         sendIdentity(identity);
 
         _socket.on(WebSocketEventType.Message, messageHandler);
+        _socket.on(WebSocketEventType.Close, closeHandler);
     }
 
 
@@ -37,6 +38,10 @@ class PlayerProxy {
         trace('New Connection: ' + Json.stringify(identityOrder));
 
         sendMessage(Json.stringify(identityOrder));
+    }
+
+    private function closeHandler () {
+        Lobby.getInstance().findPlayer(_id).onPlayerLeaves(_id);
     }
 
     private function messageHandler( data:String ):Void {

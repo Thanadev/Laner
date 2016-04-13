@@ -44,7 +44,8 @@ class Room {
     public function onPlayerLeaves (playerId: Float) {
         if (players.remove(playerId)) {
             if (players.length == 1) {
-                //server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(player) + " has won the map ! Next map !")));
+                server.getPlayerById(players[0]).proxy.sendMessage(Json.stringify(new EndOrder(OrderStatus.SUCCESS, MessageType.ENDGAME, "Player " + players.indexOf(player) + " has won the map ! Next map !")));
+                Lobby.getInstance().gameFinishedHandler(this);
             }
         }
     }
@@ -108,11 +109,12 @@ class Room {
     public function sendMapToClients () {
         grid = new GameGrid(players);
 
-        var gridOrder = new LoadMapOrder(OrderStatus.SUCCESS, grid);
 
-        for (player in players) {
+
+        for (i in 0...players.length) {
             trace("Client asked !");
-            server.getPlayerById(player).proxy.sendMessage(Json.stringify(gridOrder));
+            var gridOrder = new LoadMapOrder(OrderStatus.SUCCESS, grid, i);
+            server.getPlayerById(players[i]).proxy.sendMessage(Json.stringify(gridOrder));
         }
     }
 
