@@ -63,7 +63,7 @@ class ServerProxy {
                     orderO = PlayerAction.MOVE_RIGHT;
                 }
 
-                var actionOrder = new ActionOrder(_client.getIdentity().idPlayer, OrderStatus.SUCCESS, orderO);
+                var actionOrder = new ActionOrder(order.playerId, OrderStatus.SUCCESS, orderO);
                 _client.serverOrderHandler(actionOrder);
             case MessageType.LOADMAP:
                 trace('Received map to load!');

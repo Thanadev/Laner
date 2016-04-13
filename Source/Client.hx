@@ -99,8 +99,10 @@ class Client extends Sprite {
 	public function serverOrderHandler (order: ActionOrder) {
         if (order.status == OrderStatus.SUCCESS) {
             if (order.playerId == _identity.idPlayer) {
+                trace("local player moved ! " + order.playerId);
                 localPlayer.receiveOrder(order.order);
             } else {
+                trace("enemy player moved ! " + order.playerId);
                 enemyPlayer.receiveOrder(order.order);
             }
         }
